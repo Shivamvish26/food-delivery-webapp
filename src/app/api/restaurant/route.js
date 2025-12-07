@@ -11,3 +11,12 @@ export async function GET() {
     return NextResponse.json({ success: false, message: error.message });
   }
 }
+
+export async function POST(request) {
+  let payload = await request.json();
+  await ConnectDB();
+  const restaurant = new Restaurantdata(payload)
+  const result =await restaurant.save()
+  console.log(payload);
+  return NextResponse.json({ result,success:true });
+}

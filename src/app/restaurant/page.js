@@ -11,7 +11,7 @@ export default function Restaurant() {
   return (
     <>
       <Header />
-      <div className="container-fluid text-center mt-2">
+      <div className="container-fluid text-center mt-2 mb-4 pb-5">
         <h1 className="mt-3">Food Delivery Web App</h1>
 
         {login ? <RestaurantLogin /> : <RestaurantSignUp />}
