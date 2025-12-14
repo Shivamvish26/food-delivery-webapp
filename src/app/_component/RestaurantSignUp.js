@@ -12,6 +12,7 @@ export default function RestaurantSignUp() {
   const [contact, setContact] = useState("");
   const [name, setName] = useState("");
   const router = useRouter();
+  const [emailerr, setEmailerr] = useState(false)
 
   const handleregister = async (e) => {
     e.preventDefault();
@@ -49,6 +50,20 @@ export default function RestaurantSignUp() {
     }
   };
 
+function validateEmail(e) {
+  let item = e.target.value;
+  const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailregex.test(item)) {
+    setEmailerr(true);
+  } else {
+    setEmailerr(false);
+  }
+
+  setEmail(item); 
+}
+
+
   return (
     <div className="d-flex justify-content-center mt-2">
       <div className="p-4 shadow-sm rounded col-md-5">
@@ -76,7 +91,7 @@ export default function RestaurantSignUp() {
               className="form-control"
               placeholder="Enter Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={validateEmail}
             />
           </div>
 

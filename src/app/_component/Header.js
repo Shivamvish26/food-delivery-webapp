@@ -22,7 +22,7 @@ export default function Header() {
     } else {
       setDetails(JSON.parse(data));
     }
-  });
+  },[]);
 
   return (
     <div className="shadow-sm py-2">
