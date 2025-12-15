@@ -14,9 +14,28 @@ export async function GET() {
 
 export async function POST(request) {
   let payload = await request.json();
+  let result;
+  let success = false;
   await ConnectDB();
-  const restaurant = new Restaurantdata(payload)
-  const result =await restaurant.save()
-  console.log(payload);
-  return NextResponse.json({ result,success:true });
+
+  if (payload.login) {
+    // login wala code
+    result = await Restaurantdata.findOne({
+      email: payload.email,
+      password: payload.password,
+    });
+    if (result) {
+      success = true;
+    }
+  } else {
+    // resister wala code
+    const restaurant = new Restaurantdata(payload);
+    result = await restaurant.save();
+    console.log(payload);
+    if (result) {
+      success = true;
+    }
+  }
+
+  return NextResponse.json({ result, success });
 }
