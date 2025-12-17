@@ -43,6 +43,21 @@ export default function FoodItem() {
     }
   };
 
+  const deleteFoodItem = async (id) => {
+    let response = await fetch(
+      `http://localhost:3000/api/restaurant/food/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    response = await response.json();
+    if (response.success) {
+      Itemfoodload();
+    } else {
+      alert("Error while deleting food item");
+    }
+  };
+
   useEffect(() => {
     Itemfoodload();
   }, []);
@@ -62,8 +77,8 @@ export default function FoodItem() {
             <th className="fw-semibold">Product Code</th>
             <th className="fw-semibold">Product Image</th>
             <th className="fw-semibold">Description</th>
-            <th className="fw-semibold">Edit</th>
-            <th className="fw-semibold">Delete</th>
+            <th className="fw-semibold">Action</th>
+            <th className="fw-semibold">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -77,13 +92,24 @@ export default function FoodItem() {
                 <td>{item.brand}</td>
                 <td>{item.stock}</td>
                 <td>{item.productcode}</td>
-                <td>{item.product_image}</td>
+                <td>
+                  <img
+                    src={item.product_image}
+                    alt="Product Image"
+                    style={{ width: "20%", height: "20%" }}
+                  />
+                </td>
                 <td>{item.description}</td>
                 <td>
                   <button className="w-100 common__btn">Edit</button>
                 </td>
                 <td>
-                  <button className="w-100 common__btn">Delete</button>
+                  <button
+                    className="w-100 common__btn"
+                    onClick={() => deleteFoodItem(item._id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

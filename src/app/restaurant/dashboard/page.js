@@ -23,7 +23,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {show ? <Addproduct /> : <FoodItem/>}
+          {show ? <Addproduct setShow={setShow} /> : <FoodItem/>}
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Addproduct() {
+export default function Addproduct(props) {
   const [product, setProduct] = useState("");
   const [price, setPrice] = useState("");
   const [discountprice, setDiscountprice] = useState("");
@@ -69,6 +69,7 @@ export default function Addproduct() {
       setProductcode("");
       setProductimage("");
       setDescription("");
+      props.setShow(false);
     } else {
       alert("Error occured while submitting the form");
     }
