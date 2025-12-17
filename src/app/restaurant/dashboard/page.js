@@ -1,5 +1,6 @@
 "use client";
 import Addproduct from "@/app/_component/Addproducts";
+import FoodItem from "@/app/_component/FoodItemlist";
 import Footer from "@/app/_component/Footer";
 import Header from "@/app/_component/Header";
 import { useState } from "react";
@@ -22,7 +23,7 @@ const Dashboard = () => {
             </button>
           </div>
 
-          {show ? <Addproduct /> : <h1>Welcome to dashboard</h1>}
+          {show ? <Addproduct /> : <FoodItem/>}
         </div>
       </div>
 
