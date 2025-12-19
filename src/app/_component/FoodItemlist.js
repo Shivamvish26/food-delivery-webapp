@@ -1,32 +1,10 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function FoodItem() {
-  const data = [
-    {
-      product: "Pizza",
-      price: "200",
-      discountprice: "10",
-      category: "Fast Food",
-      brand: "Domino's",
-      stock: "20",
-      productcode: "D123",
-      product_image: "Pizza Image",
-      description: "Delicious cheese pizza",
-    },
-    {
-      product: "Pizza",
-      price: "300",
-      discountprice: "13",
-      category: "Fast Food",
-      brand: "KFC",
-      stock: "10",
-      productcode: "D1234",
-      product_image: "Pizza Image",
-      description: "Delicious cheese pizza",
-    },
-  ];
-
   const [foodItem, setFoodItem] = useState([]);
+  const router = useRouter();
 
   const Itemfoodload = async () => {
     const restaurantData = JSON.parse(localStorage.getItem("Restaurant Data"));
@@ -36,6 +14,7 @@ export default function FoodItem() {
       `http://localhost:3000/api/restaurant/food/${resto_id}`
     );
     response = await response.json();
+
     if (response.success) {
       setFoodItem(response.result);
     } else {
@@ -51,6 +30,7 @@ export default function FoodItem() {
       }
     );
     response = await response.json();
+
     if (response.success) {
       Itemfoodload();
     } else {
@@ -65,26 +45,27 @@ export default function FoodItem() {
   return (
     <div>
       <h1>Food Item list</h1>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th className="fw-semibold">Product</th>
-            <th className="fw-semibold">Price</th>
-            <th className="fw-semibold">Discount Price</th>
-            <th className="fw-semibold">Category</th>
-            <th className="fw-semibold">Brand</th>
-            <th className="fw-semibold">Stock</th>
-            <th className="fw-semibold">Product Code</th>
-            <th className="fw-semibold">Product Image</th>
-            <th className="fw-semibold">Description</th>
-            <th className="fw-semibold">Action</th>
-            <th className="fw-semibold">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {foodItem &&
-            foodItem.map((item, index) => (
-              <tr key={index}>
+
+      {foodItem.length > 0 ? (
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Discount Price</th>
+              <th>Category</th>
+              <th>Brand</th>
+              <th>Stock</th>
+              <th>Product Code</th>
+              <th>Product Image</th>
+              <th>Description</th>
+              <th>Action</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {foodItem.map((item) => (
+              <tr key={item._id}>
                 <td>{item.product}</td>
                 <td>{item.price}</td>
                 <td>{item.discountprice}</td>
@@ -95,13 +76,18 @@ export default function FoodItem() {
                 <td>
                   <img
                     src={item.product_image}
-                    alt="Product Image"
-                    style={{ width: "20%", height: "20%" }}
+                    alt="Product"
+                    style={{ width: "60px" }}
                   />
                 </td>
                 <td>{item.description}</td>
                 <td>
-                  <button className="w-100 common__btn">Edit</button>
+                  <button
+                    className="w-100 common__btn"
+                    onClick={() => router.push("dashboard/" + item._id)}
+                  >
+                    Edit
+                  </button>
                 </td>
                 <td>
                   <button
@@ -113,8 +99,11 @@ export default function FoodItem() {
                 </td>
               </tr>
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      ) : (
+        <p>No Food Item Found</p>
+      )}
     </div>
   );
 }
