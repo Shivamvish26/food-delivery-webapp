@@ -35,6 +35,35 @@ export default function Editfooditem(props) {
     } else {
       setError(false);
     }
+
+    let response = await fetch(
+      `http://localhost:3000/api/restaurant/food/edit/${id}`,
+      {
+        method: "PUT",
+        header: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product,
+          price,
+          discountprice,
+          category,
+          brand,
+          stock,
+          productcode,
+          product_image: productimage,
+          description,
+        }),
+      }
+    );
+    response = await response.json();
+    console.log(response);
+    if (response.success) {
+      alert("Product edited Successfully");
+      router.push("../dashboard");
+    } else {
+      alert("Some thing went wrong");
+    }
   };
 
   const handledataload = async (foodId) => {
@@ -52,6 +81,14 @@ export default function Editfooditem(props) {
     if (data.success) {
       const item = data.result;
       setProduct(item.product);
+      setPrice(item.price);
+      setDiscountprice(item.discountprice);
+      setCategory(item.category);
+      setBrand(item.brand);
+      setStock(item.stock);
+      setProductcode(item.productcode);
+      setProductimage(item.product_image);
+      setDescription(item.description);
     }
   };
 
@@ -230,7 +267,7 @@ export default function Editfooditem(props) {
             </div>
             <div className="mt-3">
               <button className="common__btn text-decoration-none w-25">
-                Add Product
+                Edit Product
               </button>
             </div>
           </form>
