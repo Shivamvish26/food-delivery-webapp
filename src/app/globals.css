@@ -118,3 +118,25 @@ html {
 }
 
 /* ========================================================================== */
+
+.hero-banner {
+  background-image: url("/assets/image/banner.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 40vh;
+  position: relative;
+}
+
+.input-background {
+  background: rgba(0, 0, 0, 0.45);
+  min-height: 40vh;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: none !important;
+  outline: none !important;
+  border-color: #ced4da !important;
+}
