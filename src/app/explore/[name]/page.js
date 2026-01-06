@@ -10,6 +10,15 @@ export default function Explore() {
   const [restaurantdata, setRestaurantdata] = useState("");
   const [fooddata, setFooddata] = useState([]);
   const [cartdata, Setcartdata] = useState();
+  const [cartstorage, setCartStorage] = useState(
+    JSON.parse(localStorage.getItem("Cart"))
+  );
+  const [cardsIds, setCardIds] = useState(() =>
+    (cartstorage || []).map((item) => item._id)
+  );
+  const [removeCartData, setRemoveCartData] = useState();
+
+  console.log("Cart Items :", cardsIds);
 
   const name = params.name;
   const id = searchParams.get("id");
@@ -26,7 +35,16 @@ export default function Explore() {
 
   const handlecartdata = (item) => {
     Setcartdata(item);
+    setCardIds((prev) =>
+      prev.includes(item._id) ? prev : [...prev, item._id]
+    );
   };
+
+ const handleremovecartdata = (id) => {
+  setRemoveCartData(id);
+  setCardIds((prev) => prev.filter((itemId) => itemId !== id));
+};
+
 
   useEffect(() => {
     console.log("name:", name);
@@ -36,7 +54,7 @@ export default function Explore() {
 
   return (
     <div>
-      <CustomerHeading Cartdata={cartdata} />
+      <CustomerHeading Cartdata={cartdata} removeCartData={removeCartData}/>
       <div className="hero-banner">
         <div className="input-background d-flex align-items-center justify-content-center">
           <h1 className="text-white">{decodeURI(name)}</h1>
@@ -100,14 +118,22 @@ export default function Explore() {
                           <td>{item.brand}</td>
                           <td>{item.productcode}</td>
                           <td>{item.description}</td>
-                          <td>
-                            <button
-                              className="btn btn-sm btn-primary"
-                              onClick={() => handlecartdata(item)}
-                            >
-                              Add to Cart
-                            </button>
-                          </td>
+                          {cardsIds.includes(item._id) ? (
+                            <td>
+                              <button className="btn btn-sm btn-primary" onClick={()=>handleremovecartdata(item._id)}>
+                                Remove from Cart
+                              </button>
+                            </td>
+                          ) : (
+                            <td>
+                              <button
+                                className="btn btn-sm btn-primary"
+                                onClick={() => handlecartdata(item)}
+                              >
+                                Add to Cart
+                              </button>
+                            </td>
+                          )}
                         </tr>
                       ))
                     ) : (

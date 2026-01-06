@@ -1,35 +1,56 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 export default function CustomerHeading(props) {
-  const cartStorage = JSON.parse(localStorage.getItem("Cart"));
-  const [cartvalue, setCartvalue] = useState(cartStorage?.length);
-  const [cartitem, setCartItem] = useState(cartvalue);
-  console.log(props);
+  const [cartvalue, setCartvalue] = useState(0);
+  const [cartitem, setCartItem] = useState([]);
 
   useEffect(() => {
-    if (props.Cartdata) {
-      console.log(props);
-      if (cartvalue) {
-        if (cartitem[0].resto_id !== props.Cartdata._id) {
-          localStorage.removeItem("Cart");
-          setCartvalue(1);
-          setCartItem([props.Cartdata]);
-          localStorage.setItem("Cart", JSON.stringify([props.Cartdata]));
-        } else {
-          let localCart = cartitem;
-          localCart.push(JSON.parse(JSON.stringify(props.Cartdata)));
-          setCartItem(localCart);
-          setCartvalue(cartvalue + 1);
-          localStorage.setItem("Cart", JSON.stringify(localCart));
-        }
-      } else {
+    const cartStorage = JSON.parse(localStorage.getItem("Cart")) || [];
+    setCartItem(cartStorage);
+    setCartvalue(cartStorage.length);
+  }, []);
+
+  useEffect(() => {
+    if (!props.Cartdata) return;
+
+    let localCart = JSON.parse(localStorage.getItem("Cart")) || [];
+
+    if (localCart.length > 0) {
+      if (localCart[0].resto_id !== props.Cartdata.resto_id) {
+        const newCart = [props.Cartdata];
+        setCartItem(newCart);
         setCartvalue(1);
-        setCartItem([props.Cartdata]);
-        localStorage.setItem("Cart", JSON.stringify([props.Cartdata]));
+        localStorage.setItem("Cart", JSON.stringify(newCart));
+      } else {
+        const updatedCart = [...localCart, props.Cartdata];
+        setCartItem(updatedCart);
+        setCartvalue(updatedCart.length);
+        localStorage.setItem("Cart", JSON.stringify(updatedCart));
       }
+    } else {
+      const newCart = [props.Cartdata];
+      setCartItem(newCart);
+      setCartvalue(1);
+      localStorage.setItem("Cart", JSON.stringify(newCart));
     }
   }, [props.Cartdata]);
+
+  useEffect(() => {
+    if (!props.removeCartData) return;
+
+    const localCartItem = cartitem.filter(
+      (item) => item._id !== props.removeCartData
+    );
+
+    setCartItem(localCartItem);
+    setCartvalue(localCartItem.length);
+    localStorage.setItem("Cart", JSON.stringify(localCartItem));
+
+    if (localCartItem.length === 0) {
+      localStorage.removeItem("Cart");
+    }
+  }, [props.removeCartData]);
 
   return (
     <div className="shadow-sm py-2">
@@ -48,6 +69,7 @@ export default function CustomerHeading(props) {
               Home
             </Link>
           </li>
+
           <li>
             <Link className="text-decoration-none text-dark" href="#">
               Login
@@ -59,6 +81,7 @@ export default function CustomerHeading(props) {
               Restaurant Login
             </Link>
           </li>
+
           <li className="position-relative">
             <Link
               className="text-decoration-none text-dark position-relative"
@@ -67,7 +90,7 @@ export default function CustomerHeading(props) {
               <i className="bi bi-cart fs-5"></i>
 
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {cartvalue ? cartvalue : 0}
+                {cartvalue}
               </span>
             </Link>
           </li>
